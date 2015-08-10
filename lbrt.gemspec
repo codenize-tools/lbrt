@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'librato-client'
+  spec.add_dependency 'thor'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
