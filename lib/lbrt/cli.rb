@@ -1,0 +1,2 @@
+module Lbrt::CLI
+end
