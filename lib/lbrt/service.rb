@@ -1,0 +1,2 @@
+module Lbrt::Service
+end
