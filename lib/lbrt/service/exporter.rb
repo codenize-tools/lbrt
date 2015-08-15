@@ -1,8 +1,4 @@
 class Lbrt::Service::Exporter
-  EXCLUDE_KEYS = %w(
-    id
-  )
-
   class << self
     def export(client, options = {})
       self.new(client, options).export
@@ -30,10 +26,6 @@ class Lbrt::Service::Exporter
 
       if service_by_key[service_key]
         raise "Duplicate service type/title exists: #{type}/#{title}"
-      end
-
-      EXCLUDE_KEYS.each do |key|
-        s.delete(key)
       end
 
       service_by_key[service_key] = s
