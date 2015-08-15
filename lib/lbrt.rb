@@ -20,6 +20,14 @@ require 'lbrt/cli/app'
 
 require 'lbrt/driver'
 
+require 'lbrt/alert'
+require 'lbrt/alert/dsl'
+require 'lbrt/alert/dsl/context'
+require 'lbrt/alert/dsl/context/alert'
+require 'lbrt/alert/dsl/context/alert/condition'
+require 'lbrt/alert/dsl/converter'
+require 'lbrt/alert/exporter'
+
 require 'lbrt/service'
 require 'lbrt/service/dsl'
 require 'lbrt/service/dsl/context'

@@ -12,6 +12,8 @@ class Lbrt::Service::DSL::Converter
     output_services(@exported)
   end
 
+  private
+
   def output_services(service_by_key)
     services = []
 
