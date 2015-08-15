@@ -20,22 +20,25 @@ class Lbrt::Service::Exporter
   end
 
   def normalize(services)
-    service_by_title = {}
+    service_by_key = {}
 
     services.each do |s|
+      type = s.delete('type')
       title = s.delete('title')
 
-      if service_by_title[title]
-        raise "Duplicate service title exists: #{title}"
+      service_key = [type, title]
+
+      if service_by_key[service_key]
+        raise "Duplicate service type/title exists: #{type}/#{title}"
       end
 
       EXCLUDE_KEYS.each do |key|
         s.delete(key)
       end
 
-      service_by_title[title] = s
+      service_by_key[service_key] = s
     end
 
-    service_by_title
+    service_by_key
   end
 end
