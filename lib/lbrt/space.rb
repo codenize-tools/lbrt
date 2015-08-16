@@ -37,6 +37,9 @@ class Lbrt::Space
       unless actual_space
         updated = @driver.create_space(name_or_id, expected_space) || updated
         actual_space = expected_space.merge('charts' => {})
+
+        # Set dummy id for dry-run
+        actual_space['id'] ||= -1
       end
 
       updated = walk_space(name_or_id, expected_space, actual_space) || updated

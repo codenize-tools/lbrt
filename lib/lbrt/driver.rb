@@ -11,7 +11,7 @@ class Lbrt::Driver
   def create_space(name, expected)
     updated = false
 
-    log(:info, "Create Space: #{name}", :color => :cyan)
+    log(:info, "Create Space `#{name}`", :color => :cyan)
 
     unless name.is_a?(String)
       raise TypeError, "wrong argument type #{name.class}: #{name.inspect} (expected String)"
@@ -29,7 +29,7 @@ class Lbrt::Driver
   def delete_space(name_or_id, actual)
     updated = false
 
-    log(:info, "Delete Space: #{name_or_id}", :color => :red)
+    log(:info, "Delete Space `#{name_or_id}`", :color => :red)
 
     space_id = actual.fetch('id')
 
@@ -46,7 +46,7 @@ class Lbrt::Driver
   def create_chart(space_name_or_id, space_id, name, expected)
     updated = false
 
-    log(:info, "Create Space `#{space_name_or_id}` > Chart: #{name}", :color => :cyan)
+    log(:info, "Create Space `#{space_name_or_id}` > Chart `#{name}`", :color => :cyan)
 
     unless name.is_a?(String)
       raise TypeError, "wrong argument type #{name.class}: #{name.inspect} (expected String)"
@@ -91,10 +91,8 @@ class Lbrt::Driver
     chart_id = actual.fetch('id')
 
     unless @options[:dry_run]
-      expected = expected.dup
-      # XXX: Correct?
-      expected['chart_type'] = expected.delete('type')
-      @client.spaces(space_id).charts(chart_id).put(expected)
+      params = chart_to_update_params(expected)
+      @client.spaces(space_id).charts(chart_id).put(params)
       updated = true
     end
 
@@ -227,6 +225,16 @@ class Lbrt::Driver
     params = alert.dup
     params['name'] = name
     params['services'] = params.fetch('services').map {|i| i.fetch('id') }
+    params
+  end
+
+  def chart_to_update_params(chat)
+    params = chat.dup
+    # XXX: Correct?
+    params['chart_type'] = params.delete('type')
+    params['max'] ||= nil
+    params['min'] ||= nil
+    params['label'] ||= nil
     params
   end
 end

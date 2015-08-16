@@ -30,21 +30,35 @@ class Lbrt::Utils
   end
 
   module CLIHelper
+    REGEXP_OPTIONS = [
+      :target
+    ]
+
     def client(klass)
-      cli = Librato::Client.new(
+      librato = Librato::Client.new(
         :user => options.delete(:user),
         :token => options.delete(:token),
         :debug => options[:debug]
       )
 
       String.colorize = options[:color]
-      options[:dry_run] = options.delete(:'dry-run')
 
-      if options[:target]
-        options[:target] = Regexp.new(options[:target])
+
+      options.keys.each do |key|
+        if key.to_s =~ /-/
+          value = options.delete(key)
+          key = key.to_s.gsub('-', '_').to_sym
+          options[key] = value
+        end
       end
 
-      klass.new(cli, options)
+      REGEXP_OPTIONS.each do |key|
+        if options[key]
+          options[key] = Regexp.new(options[key])
+        end
+      end
+
+      klass.new(librato, options)
     end
   end
 end
