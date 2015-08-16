@@ -31,7 +31,7 @@ class Lbrt::Alert
       actual_alert = actual.delete(name)
 
       if actual_alert
-        #updated = walk_alert(name, expected_alert, actual_alert) || updated
+        updated = walk_alert(name, expected_alert, actual_alert) || updated
       else
         updated = @driver.create_alert(name, expected_alert) || updated
       end
@@ -50,11 +50,29 @@ class Lbrt::Alert
     actual_without_id = actual.dup
     alert_id = actual_without_id.delete('id')
 
-    if expected != actual_without_id
+    if differ?(expected, actual_without_id)
       updated = @driver.update_alert(name, expected.merge('id' => alert_id), actual) || updated
     end
 
     updated
+  end
+
+  def differ?(alert1, alert2)
+    alert1 = normalize(alert1)
+    alert2 = normalize(alert2)
+    alert1 != alert2
+  end
+
+  def normalize(alert)
+    alert = alert.dup
+
+    alert['conditions'] = alert.fetch('conditions').map {|i|
+      i.delete('id')
+      i
+    }.sort_by(&:to_s)
+
+    alert['services'] = alert.fetch('services').map {|i| i.fetch('id') }.sort
+    alert
   end
 
   def load_file(file)

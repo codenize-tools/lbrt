@@ -68,6 +68,8 @@ class Lbrt::Alert::DSL::Context::Alert
       raise "Service `#{type}/#{title}` is not found"
     end
 
+    service['title'] = title
+    service['type'] = type
     @result['services'] << service
   end
 end
