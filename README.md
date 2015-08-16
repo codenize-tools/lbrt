@@ -1,6 +1,6 @@
 # Lbrt
 
-A tool to manage Librato. It defines the state of Librato using DSL, and updates Librato according to DSL.
+A tool to manage [Librato](https://www.librato.com/). It defines the state of [Librato](https://www.librato.com/) using DSL, and updates Librato according to DSL.
 
 ## Installation
 
