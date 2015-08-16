@@ -17,7 +17,9 @@ class Lbrt::Logger < ::Logger
 
   module Helper
     def log(level, message, opts = {})
-      opts = (@options || {}).merge(opts)
+      global_options = (@options || {}).dup
+      global_options.delete(:color)
+      opts = global_options.merge(opts)
 
       message = "[#{level.to_s.upcase}] #{message}" unless level == :info
       message << ' (dry-run)' if opts[:dry_run]
