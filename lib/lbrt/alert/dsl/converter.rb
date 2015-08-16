@@ -18,7 +18,7 @@ class Lbrt::Alert::DSL::Converter
     alerts = []
 
     alert_by_name.sort_by(&:first).map do |name, attrs|
-      next unless target_matched?(name)
+      next unless Lbrt::Utils.matched?(name, @options[:target])
       alerts << output_alert(name, attrs)
     end
 
@@ -109,13 +109,5 @@ end
     <<-EOS
   service #{type.inspect}, #{title.inspect}
     EOS
-  end
-
-  def target_matched?(str)
-    if @options[:target]
-      str =~ @options[:target]
-    else
-      true
-    end
   end
 end

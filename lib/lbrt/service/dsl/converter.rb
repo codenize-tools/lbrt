@@ -18,7 +18,7 @@ class Lbrt::Service::DSL::Converter
     services = []
 
     service_by_key.sort_by(&:first).map do |key, attrs|
-      next unless key.any? {|i| target_matched?(i) }
+      next unless key.any? {|i| Lbrt::Utils.matched?(i, @options[:target]) }
       services << output_service(key, attrs)
     end
 
@@ -34,15 +34,5 @@ service #{type.inspect}, #{title.inspect} do
   settings #{Lbrt::Utils.unbrace(settings.inspect)}
 end
     EOS
-  end
-
-  def target_matched?(str)
-    str = str.to_s
-
-    if @options[:target]
-      str =~ @options[:target]
-    else
-      true
-    end
   end
 end

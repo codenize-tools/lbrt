@@ -28,6 +28,7 @@ class Lbrt::Alert
     updated = false
 
     expected.each do |name, expected_alert|
+      next unless Lbrt::Utils.matched?(name, @options[:target])
       actual_alert = actual.delete(name)
 
       if actual_alert
@@ -38,6 +39,7 @@ class Lbrt::Alert
     end
 
     actual.each do |name, actual_alert|
+      next unless Lbrt::Utils.matched?(name, @options[:target])
       updated = @driver.delete_alert(name, actual_alert) || updated
     end
 

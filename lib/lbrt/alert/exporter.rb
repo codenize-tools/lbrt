@@ -29,6 +29,7 @@ class Lbrt::Alert::Exporter
         alrt.delete(key)
       end
 
+      alrt['attributes'] ||= {}
       alert_by_name[name] = alrt
     end
 
