@@ -27,13 +27,13 @@ class Lbrt::Alert
   def walk_alerts(expected, actual)
     updated = false
 
-    expected.each do |key, expected_alert|
-      actual_alert = actual.delete(key)
+    expected.each do |name, expected_alert|
+      actual_alert = actual.delete(name)
 
       if actual_alert
-        updated = walk_alert(key, expected_alert, actual_alert) || updated
+        #updated = walk_alert(name, expected_alert, actual_alert) || updated
       else
-        updated = @driver.create_alert(key, expected_alert) || updated
+        updated = @driver.create_alert(name, expected_alert) || updated
       end
     end
 

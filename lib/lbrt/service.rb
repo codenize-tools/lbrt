@@ -37,21 +37,21 @@ class Lbrt::Service
       end
     end
 
-    actual.each do |name, actual_service|
-      updated = @driver.delete_service(name, actual_service) || updated
+    actual.each do |key, actual_service|
+      updated = @driver.delete_service(key, actual_service) || updated
     end
 
     updated
   end
 
-  def walk_service(name, expected, actual)
+  def walk_service(key, expected, actual)
     updated = false
 
     actual_without_id = actual.dup
     service_id = actual_without_id.delete('id')
 
     if expected != actual_without_id
-      updated = @driver.update_service(name, expected.merge('id' => service_id), actual) || updated
+      updated = @driver.update_service(key, expected.merge('id' => service_id), actual) || updated
     end
 
     updated

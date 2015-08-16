@@ -6,7 +6,28 @@ class Lbrt::Driver
     @options = options
   end
 
-  # Services
+  # Alert
+
+  def create_alert(name, expected)
+    updated = false
+
+    log(:info, "Create Alert: #{name}", :color => :cyan)
+
+    unless @options[:dry_run]
+      response = @client.services.post(
+        'title'    => title,
+        'type'     => type,
+        'settings' => settings
+      )
+
+      expected['id'] = response.fetch('id')
+      updated = true
+    end
+
+    updated
+  end
+
+  # Service
 
   def create_service(key, expected)
     updated = false
