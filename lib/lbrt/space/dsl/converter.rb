@@ -51,10 +51,22 @@ end
     type = attrs.fetch('type')
     streams = attrs.fetch('streams')
 
-    <<-EOS
+    out = <<-EOS
   chart #{name_or_id.inspect} do
     type #{type.inspect}
     #{output_streams(streams)}
+    EOS
+
+    %w(max min label).each do |key|
+      next unless attrs.has_key?(key)
+      value = attrs[key]
+
+      out << <<-EOS
+    #{key} #{value.inspect}
+      EOS
+    end
+
+    out << <<-EOS
   end
     EOS
   end

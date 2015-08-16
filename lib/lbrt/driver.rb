@@ -6,12 +6,107 @@ class Lbrt::Driver
     @options = options
   end
 
+  # Space
+
+  def create_space(name, expected)
+    updated = false
+
+    log(:info, "Create Space: #{name}", :color => :cyan)
+
+    unless name.is_a?(String)
+      raise TypeError, "wrong argument type #{name.class}: #{name.inspect} (expected String)"
+    end
+
+    unless @options[:dry_run]
+      response = @client.spaces.post('name' => name)
+      expected['id'] = response.fetch('id')
+      updated = true
+    end
+
+    updated
+  end
+
+  def delete_space(name_or_id, actual)
+    updated = false
+
+    log(:info, "Delete Space: #{name_or_id}", :color => :red)
+
+    space_id = actual.fetch('id')
+
+    unless @options[:dry_run]
+      @client.spaces(space_id).delete
+      updated = true
+    end
+
+    updated
+  end
+
+  # Chart
+
+  def create_chart(space_name_or_id, space_id, name, expected)
+    updated = false
+
+    log(:info, "Create Space `#{space_name_or_id}` > Chart: #{name}", :color => :cyan)
+
+    unless name.is_a?(String)
+      raise TypeError, "wrong argument type #{name.class}: #{name.inspect} (expected String)"
+    end
+
+    unless @options[:dry_run]
+      response = @client.spaces(space_id).charts.post(expected.merge('name' => name))
+      expected['id'] = response.fetch('id')
+      updated = true
+    end
+
+    updated
+  end
+
+  def delete_chart(space_name_or_id, space_id, name_or_id, actual)
+    updated = false
+
+    log(:info, "Delete Space `#{space_name_or_id}` > `#{name_or_id}`", :color => :red)
+
+    chart_id = actual.fetch('id')
+
+    unless @options[:dry_run]
+      @client.spaces(space_id).charts(chart_id).delete
+      updated = true
+    end
+
+    updated
+  end
+
+  def update_chart(space_name_or_id, space_id, name_or_id, expected, actual)
+    updated = false
+
+    log(:info, "Update Space `#{space_name_or_id}` > Chart: #{name_or_id}", :color => :green)
+
+    delta = diff(Lbrt::Space::DSL::Converter,
+      {space_name_or_id => {'charts' => {name_or_id => actual}}},
+      {space_name_or_id => {'charts' => {name_or_id => expected}}}
+    )
+
+    log(:info, delta)
+
+    chart_id = actual.fetch('id')
+
+    unless @options[:dry_run]
+      expected = expected.dup
+      # XXX: Correct?
+      expected['chart_type'] = expected.delete('type')
+      @client.spaces(space_id).charts(chart_id).put(expected)
+      updated = true
+    end
+
+    updated
+  end
+
   # Alert
 
   def create_alert(name, expected)
     updated = false
 
-    log(:info, "Create Alert: #{name}", :color => :cyan)
+    log(:info, "Create Alert `#{name}`", :color => :cyan)
 
     unless @options[:dry_run]
       params = alert_to_params(name, expected)
@@ -26,7 +121,7 @@ class Lbrt::Driver
   def delete_alert(name, actual)
     updated = false
 
-    log(:info, "Delete Alert: #{name}", :color => :red)
+    log(:info, "Delete Alert `#{name}`", :color => :red)
 
     alert_id = actual.fetch('id')
 
@@ -41,7 +136,7 @@ class Lbrt::Driver
   def update_alert(name, expected, actual)
     updated = false
 
-    log(:info, "Update Alert: #{name}", :color => :red)
+    log(:info, "Update Alert `#{name}`", :color => :green)
     log(:info, diff(Lbrt::Alert::DSL::Converter, {name => actual}, {name => expected}))
 
     alert_id = actual.fetch('id')
@@ -61,7 +156,7 @@ class Lbrt::Driver
     updated = false
     type, title = key
 
-    log(:info, "Create Service: #{type}/#{title}", :color => :cyan)
+    log(:info, "Create Service `#{type}/#{title}`", :color => :cyan)
 
     settings = expected.fetch('settings')
 
@@ -83,7 +178,7 @@ class Lbrt::Driver
     updated = false
     type, title = key
 
-    log(:info, "Delete Service: #{type}/#{title}", :color => :red)
+    log(:info, "Delete Service `#{type}/#{title}`", :color => :red)
 
     service_id = actual.fetch('id')
 
@@ -99,7 +194,7 @@ class Lbrt::Driver
     updated = false
     type, title = key
 
-    log(:info, "Update Service: #{type}/#{title}", :color => :cyan)
+    log(:info, "Update Service `#{type}/#{title}`", :color => :green)
     log(:info, diff(Lbrt::Service::DSL::Converter, {key => actual}, {key => expected}))
 
     service_id = actual.fetch('id')

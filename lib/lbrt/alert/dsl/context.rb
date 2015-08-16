@@ -1,4 +1,6 @@
 class Lbrt::Alert::DSL::Context
+  include Lbrt::Utils::ContextHelper
+
   def self.eval(client, dsl, path, options = {})
     self.new(client, path, options) {
       eval(dsl, binding, path)
@@ -15,17 +17,7 @@ class Lbrt::Alert::DSL::Context
     instance_eval(&block)
   end
 
-  def require(file)
-    file = (file =~ %r|\A/|) ? file : File.expand_path(File.join(File.dirname(@path), file))
-
-    if File.exist?(file)
-      instance_eval(File.read(file), file)
-    elsif File.exist?(file + '.rb')
-      instance_eval(File.read(file + '.rb'), file + '.rb')
-    else
-      Kernel.require(file)
-    end
-  end
+  private
 
   def alert(name, &block)
     name = name.to_s
@@ -34,7 +26,7 @@ class Lbrt::Alert::DSL::Context
       raise "Alert `#{name}` is already defined"
     end
 
-    alert = Lbrt::Alert::DSL::Context::Alert.new(name, @services, &block).result
-    @result[name] = alert
+    alrt = Lbrt::Alert::DSL::Context::Alert.new(name, @services, &block).result
+    @result[name] = alrt
   end
 end

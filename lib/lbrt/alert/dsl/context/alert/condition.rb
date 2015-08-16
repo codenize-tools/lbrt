@@ -20,13 +20,13 @@ class Lbrt::Alert::DSL::Context::Alert::Condition
   def result
     REQUIRED_ATTRIBUTES.each do |name|
       unless @result.has_key?(name)
-        raise "Alert `#{@alert_name}`: Condition `#{name}` is not defined"
+        raise "Alert `#{@alert_name}` > Condition > `#{name}` is not defined"
       end
     end
 
     REQUIRED_ATTRIBUTES_BY_TYPE.fetch(@result['type'], {}).each do |name|
       unless @result.has_key?(name)
-        raise "Alert `#{@alert_name}`: Condition `#{name}` is not defined"
+        raise "Alert `#{@alert_name}` > Condition > `#{name}` is not defined"
       end
     end
 

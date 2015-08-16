@@ -81,7 +81,7 @@ class Lbrt::Alert
         Lbrt::Alert::DSL.parse(@client, f.read, file)
       end
     elsif [File, Tempfile].any? {|i| file.kind_of?(i) }
-      Lbrt::Alert::DSL.parse(@clien, file.read, file.path)
+      Lbrt::Alert::DSL.parse(@client, file.read, file.path)
     else
       raise TypeError, "can't convert #{file} into File"
     end

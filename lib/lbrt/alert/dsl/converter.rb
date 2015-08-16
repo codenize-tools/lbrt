@@ -73,10 +73,6 @@ end
     metric_name = condition.fetch('metric_name')
     source = condition.fetch('source')
 
-    threshold = condition['threshold']
-    summary_function = condition['summary_function']
-    duration = condition['duration']
-
     out = <<-EOS
   condition do
     type #{type.inspect}
@@ -84,17 +80,14 @@ end
     source #{source.inspect}
     EOS
 
-    out << <<-EOS if threshold
-    threshold #{threshold.inspect}
-    EOS
+    %w(threshold summary_function duration).each do |key|
+      next unless condition.has_key?(key)
+      value = condition[key]
 
-    out << <<-EOS if summary_function
-    summary_function #{summary_function.inspect}
-    EOS
-
-    out << <<-EOS if duration
-    duration #{duration.inspect}
-    EOS
+      out << <<-EOS
+    #{key} #{value.inspect}
+      EOS
+    end
 
     out << <<-EOS
   end

@@ -28,6 +28,10 @@ class Lbrt::Space::Exporter
       name_or_id = spc.fetch('name') || space_id
       charts = @client.spaces(space_id).charts.get
 
+      if space_by_name_or_id[name_or_id]
+        raise "Duplicate space name exists: #{name}"
+      end
+
       space_by_name_or_id[name_or_id] = {
         'id' => space_id,
         'charts' => normalize_charts(charts),
@@ -43,6 +47,7 @@ class Lbrt::Space::Exporter
     charts.each do |chrt|
       name_or_id = chrt.delete('name')
       name_or_id = chrt['id'] if name_or_id.empty?
+      chrt.delete('space_id')
       chart_by_name_or_id[name_or_id] = chrt
     end
 

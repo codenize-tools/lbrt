@@ -1,4 +1,8 @@
 class Lbrt::Service::DSL::Context::Service
+  REQUIRED_ATTRIBUTES = %w(
+    settings
+  )
+
   def initialize(type, title, &block)
     @type = type
     @title = title
@@ -6,7 +10,15 @@ class Lbrt::Service::DSL::Context::Service
     instance_eval(&block)
   end
 
-  attr_reader :result
+  def result
+    REQUIRED_ATTRIBUTES.each do |name|
+      unless @result.has_key?(name)
+        raise "Service `#{@type}/#{@title}`: #{name} is not defined"
+      end
+    end
+
+    @result
+  end
 
   private
 
