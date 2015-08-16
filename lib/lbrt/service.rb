@@ -28,6 +28,7 @@ class Lbrt::Service
     updated = false
 
     expected.each do |key, expected_service|
+      next unless key.any? {|i| target_matched?(i) }
       actual_service = actual.delete(key)
 
       if actual_service
@@ -38,6 +39,7 @@ class Lbrt::Service
     end
 
     actual.each do |key, actual_service|
+      next unless key.any? {|i| target_matched?(i) }
       updated = @driver.delete_service(key, actual_service) || updated
     end
 
@@ -66,6 +68,16 @@ class Lbrt::Service
       Lbrt::Service::DSL.parse(file.read, file.path)
     else
       raise TypeError, "can't convert #{file} into File"
+    end
+  end
+
+  def target_matched?(str)
+    str = str.to_s
+
+    if @options[:target]
+      str =~ @options[:target]
+    else
+      true
     end
   end
 end

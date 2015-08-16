@@ -37,6 +37,8 @@ end
   end
 
   def target_matched?(str)
+    str = str.to_s
+
     if @options[:target]
       str =~ @options[:target]
     else
