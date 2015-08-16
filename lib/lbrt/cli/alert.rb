@@ -3,7 +3,7 @@ class Lbrt::CLI::Alert < Thor
 
   class_option :target
 
-  desc 'apply FILE', 'Apply services'
+  desc 'apply FILE', 'Apply alerts'
   option :'dry-run', :type => :boolean, :default => false
   def apply(file)
     updated = client(Lbrt::Alert).apply(file)
@@ -13,7 +13,7 @@ class Lbrt::CLI::Alert < Thor
     end
   end
 
-  desc 'export [FILE]', 'Export services'
+  desc 'export [FILE]', 'Export alerts'
   def export(file = nil)
     dsl = client(Lbrt::Alert).export
 

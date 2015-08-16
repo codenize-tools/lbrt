@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Genki Sugawara']
   spec.email         = ['sgwr_dts@yahoo.co.jp']
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{A tool to manage Librato. It defines the state of Librato using DSL, and updates Librato according to DSL.}
+  spec.description   = %q{A tool to manage Librato. It defines the state of Librato using DSL, and updates Librato according to DSL.}
   spec.homepage      = 'https://github.com/winebarrel/lbrt'
   spec.license       = 'MIT'
 
