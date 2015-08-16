@@ -38,7 +38,7 @@ end
 
   def target_matched?(str)
     if @options[:target]
-      stri =~ @options[:target]
+      str =~ @options[:target]
     else
       true
     end

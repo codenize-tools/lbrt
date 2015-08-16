@@ -1,0 +1,2 @@
+class Lbrt::Space
+end

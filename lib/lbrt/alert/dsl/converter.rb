@@ -101,14 +101,6 @@ end
     EOS
   end
 
-  def target_matched?(str)
-    if @options[:target]
-      stri =~ @options[:target]
-    else
-      true
-    end
-  end
-
   def output_services(services)
     if services.empty?
       '# no service'
@@ -124,5 +116,13 @@ end
     <<-EOS
   service #{type.inspect}, #{title.inspect}
     EOS
+  end
+
+  def target_matched?(str)
+    if @options[:target]
+      str =~ @options[:target]
+    else
+      true
+    end
   end
 end

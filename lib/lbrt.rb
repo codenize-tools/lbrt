@@ -1,6 +1,7 @@
 require 'diffy'
 require 'librato/client'
 require 'logger'
+require 'parallel'
 require 'singleton'
 require 'tempfile'
 require 'term/ansicolor'
@@ -19,6 +20,12 @@ require 'lbrt/cli/space'
 require 'lbrt/cli/app'
 
 require 'lbrt/driver'
+
+require 'lbrt/space'
+require 'lbrt/space/dsl'
+require 'lbrt/space/dsl/context'
+require 'lbrt/space/dsl/converter'
+require 'lbrt/space/exporter'
 
 require 'lbrt/alert'
 require 'lbrt/alert/dsl'
