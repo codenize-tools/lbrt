@@ -226,7 +226,7 @@ template "dstat" do
 end
 
 space "my-host-001" do
-  include_template("dstat")
+  include_template "dstat"
 end
 ```
 
