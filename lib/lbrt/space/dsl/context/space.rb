@@ -13,7 +13,7 @@ class Lbrt::Space::DSL::Context::Space
   private
 
   def include_template(template_name)
-    tmplt = @templates[template_name]
+    tmplt = @templates[template_name.to_s]
 
     unless tmplt
       raise "Space `#{@name_or_id}`: Template `#{template_name}` is not defined"

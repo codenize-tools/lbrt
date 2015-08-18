@@ -20,7 +20,7 @@ class Lbrt::Space::DSL::Context
   private
 
   def template(name, &block)
-    @templates[name] = block
+    @templates[name.to_s] = block
   end
 
   def space(name_or_id, &block)
