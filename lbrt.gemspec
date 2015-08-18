@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'diffy'
+  spec.add_dependency 'hashie'
   spec.add_dependency 'librato-client'
   spec.add_dependency 'parallel'
   spec.add_dependency 'term-ansicolor'

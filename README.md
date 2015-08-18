@@ -178,3 +178,36 @@ space "My Space2" do
   end
 end
 ```
+
+### Space template
+
+```ruby
+template "dstat" do
+  chart "total_cpu_usage" do
+    type "stacked"
+    stream do
+      metric "dstat.#{context.space_name}.total_cpu_usage"
+      type "gauge"
+      source "*"
+      group_function "breakout"
+      summary_function "average"
+    end
+    max 100.0
+  end
+
+  chart "load_avg" do
+    type "line"
+    stream do
+      metric "dstat.#{context.space_name}.load_avg"
+      type "gauge"
+      source "*"
+      group_function "breakout"
+      summary_function "average"
+    end
+  end
+end
+
+space "my-host-001" do
+  include_template("dstat")
+end
+```

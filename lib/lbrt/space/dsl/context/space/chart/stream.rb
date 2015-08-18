@@ -7,12 +7,15 @@ class Lbrt::Space::DSL::Context::Space::Chart::Stream
     summary_function
   )
 
-  def initialize(space_name_or_id, chart_name_or_id, &block)
+  def initialize(context, space_name_or_id, chart_name_or_id, &block)
+    @context = context.dup
     @space_name_or_id = space_name_or_id
     @chart_name_or_id = chart_name_or_id
     @result = {}
     instance_eval(&block)
   end
+
+  attr_reader :context
 
   def result
     REQUIRED_ATTRIBUTES.each do |name|

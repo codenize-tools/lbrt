@@ -1,4 +1,5 @@
 require 'diffy'
+require 'hashie'
 require 'librato/client'
 require 'logger'
 require 'parallel'

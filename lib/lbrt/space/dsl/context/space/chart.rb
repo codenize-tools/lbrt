@@ -3,12 +3,15 @@ class Lbrt::Space::DSL::Context::Space::Chart
     type
   )
 
-  def initialize(space_name_or_id, name_or_id, &block)
+  def initialize(context, space_name_or_id, name_or_id, &block)
+    @context = context.merge(:chart_name => name_or_id)
     @space_name_or_id = space_name_or_id
     @name_or_id = name_or_id
     @result = {'streams' => []}
     instance_eval(&block)
   end
+
+  attr_reader :context
 
   def result
     REQUIRED_ATTRIBUTES.each do |name|
@@ -27,7 +30,7 @@ class Lbrt::Space::DSL::Context::Space::Chart
   end
 
   def stream(&block)
-    @result['streams'] << Lbrt::Space::DSL::Context::Space::Chart::Stream.new(@space_name_or_id, @name_or_id, &block).result
+    @result['streams'] << Lbrt::Space::DSL::Context::Space::Chart::Stream.new(@context, @space_name_or_id, @name_or_id, &block).result
   end
 
   def max(value)
