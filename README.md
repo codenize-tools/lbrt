@@ -226,7 +226,7 @@ template "dstat" do
 end
 
 space "my-host-001" do
-  include_template("dstat")
+  include_template "dstat"
 end
 ```
 
@@ -239,3 +239,5 @@ lbrt metric peco
 ```sh
 lbrt space peco
 ```
+
+![](https://raw.githubusercontent.com/winebarrel/lbrt/master/etc/peco.gif)
