@@ -239,3 +239,5 @@ lbrt metric peco
 ```sh
 lbrt space peco
 ```
+
+![](https://raw.githubusercontent.com/winebarrel/lbrt/master/etc/peco.gif)
