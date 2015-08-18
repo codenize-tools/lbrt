@@ -7,6 +7,24 @@ class Lbrt::Space
     @driver = Lbrt::Driver.new(@client, @options)
   end
 
+  def peco
+    space_by_name_or_id = {}
+
+    metric_names = @client.spaces.get.each do |spc|
+      space_id = spc.fetch('id')
+      name_or_id = spc.fetch('name') || space_id
+      next unless Lbrt::Utils.matched?(name_or_id, @options[:target])
+      space_by_name_or_id[name_or_id] = space_id
+    end
+
+    result = PecoSelector.select_from(space_by_name_or_id)
+
+    result.each do |name|
+      url = "https://metrics.librato.com/s/spaces/#{name}"
+      Lbrt::Utils.open(url)
+    end
+  end
+
   def export(export_options = {})
     exported = Lbrt::Space::Exporter.export(@client, @options)
     Lbrt::Space::DSL.convert(exported, @options)
@@ -28,6 +46,7 @@ class Lbrt::Space
     updated = false
 
     expected.each do |name_or_id, expected_space|
+      next unless Lbrt::Utils.matched?(name_or_id, @options[:target])
       actual_space = actual.delete(name_or_id)
 
       if not actual_space and name_or_id.is_a?(Integer)

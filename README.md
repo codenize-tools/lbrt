@@ -25,6 +25,7 @@ $ lbrt
 Commands:
   lbrt alert SUBCOMMAND    # Manage alerts
   lbrt help [COMMAND]      # Describe available commands or one specific command
+  lbrt metric SUBCOMMAND   # Manage metrics
   lbrt service SUBCOMMAND  # Manage services
   lbrt space SUBCOMMAND    # Manage spaces
 
@@ -36,7 +37,9 @@ Options:
   [--color], [--no-color]
                            # Default: true
   [--debug], [--no-debug]
+```
 
+```sh
 $ lbrt help alert
 Commands:
   lbrt alert apply FILE      # Apply alerts
@@ -45,7 +48,19 @@ Commands:
 
 Options:
   [--target=TARGET]
+```
 
+```sh
+$ brt help metric
+Commands:
+  lbrt metric help [COMMAND]  # Describe subcommands or one specific subcommand
+  lbrt metric peco REGRXP     # Show alert by peco
+
+Options:
+  [--target=TARGET]
+```
+
+```sh
 $ lbrt help service
 Commands:
   lbrt service apply FILE      # Apply services
@@ -54,12 +69,15 @@ Commands:
 
 Options:
   [--target=TARGET]
+```
 
+```sh
 $ lbrt help space
 Commands:
   lbrt space apply FILE      # Apply spaces
   lbrt space export [FILE]   # Export spaces
   lbrt space help [COMMAND]  # Describe subcommands or one specific subcommand
+  lbrt space peco            # Show space by peco
 
 Options:
   [--target=TARGET]
@@ -210,4 +228,14 @@ end
 space "my-host-001" do
   include_template("dstat")
 end
+```
+
+## Show metric/space by [peco](https://github.com/peco/peco)
+
+```sh
+lbrt metric peco
+```
+
+```sh
+lbrt space peco
 ```

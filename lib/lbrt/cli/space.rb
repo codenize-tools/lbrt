@@ -4,6 +4,11 @@ class Lbrt::CLI::Space < Thor
   class_option :target
   class_option :'export-concurrency', :type => :numeric, :default => 32
 
+  desc 'peco', 'Show space by peco'
+  def peco
+    client(Lbrt::Space).peco
+  end
+
   desc 'apply FILE', 'Apply spaces'
   option :'dry-run', :type => :boolean, :default => false
   def apply(file)

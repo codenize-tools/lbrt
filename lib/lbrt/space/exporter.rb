@@ -26,6 +26,7 @@ class Lbrt::Space::Exporter
     Parallel.each(spaces, :in_threads => concurrency) do |spc|
       space_id = spc.fetch('id')
       name_or_id = spc.fetch('name') || space_id
+      next unless Lbrt::Utils.matched?(name_or_id, @options[:target])
       charts = @client.spaces(space_id).charts.get
 
       if space_by_name_or_id[name_or_id]

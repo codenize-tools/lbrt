@@ -13,6 +13,12 @@ class Lbrt::Utils
         true
       end
     end
+
+    def open(url)
+      url = Shellwords.escape(url)
+      cmd = ENV['LIBRATO_OPEN'] || 'open'
+      system("#{cmd} #{url}")
+    end
   end # of class methods
 
   module ContextHelper

@@ -3,6 +3,8 @@ require 'hashie'
 require 'librato/client'
 require 'logger'
 require 'parallel'
+require 'peco_selector'
+require 'shellwords'
 require 'singleton'
 require 'tempfile'
 require 'term/ansicolor'
@@ -16,11 +18,14 @@ require 'lbrt/utils'
 
 require 'lbrt/cli'
 require 'lbrt/cli/alert'
+require 'lbrt/cli/metric'
 require 'lbrt/cli/service'
 require 'lbrt/cli/space'
 require 'lbrt/cli/app'
 
 require 'lbrt/driver'
+
+require 'lbrt/metric'
 
 require 'lbrt/space'
 require 'lbrt/space/dsl'

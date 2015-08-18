@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'hashie'
   spec.add_dependency 'librato-client'
   spec.add_dependency 'parallel'
+  spec.add_dependency 'peco_selector'
   spec.add_dependency 'term-ansicolor'
   spec.add_dependency 'thor'
 
