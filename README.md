@@ -233,6 +233,31 @@ end
 
 You can use the template in the `alert` and `service`.
 
+```ruby
+template "my alert" do
+  alert context.metric_name do
+    description "desc"
+    attributes "runbook_url"=>"http://url.com"
+    active true
+    rearm_seconds 600
+    rearm_per_signal false
+
+    condition do
+      type "below"
+      metric_name context.metric_name
+      source nil
+      threshold 4.0
+      summary_function "sum"
+    end
+
+    service "mail", "my email"
+  end
+end
+
+include_template "my alert", metric_name: 'login-delay'
+include_template "my alert", metric_name: 'login-delay2'
+```
+
 ## Show resource by [peco](https://github.com/peco/peco)
 
 ```sh
