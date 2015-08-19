@@ -45,6 +45,7 @@ Commands:
   lbrt alert apply FILE      # Apply alerts
   lbrt alert export [FILE]   # Export alerts
   lbrt alert help [COMMAND]  # Describe subcommands or one specific subcommand
+  lbrt alert peco            # Show alert by peco
 
 Options:
   [--target=TARGET]
@@ -230,7 +231,11 @@ space "my-host-001" do
 end
 ```
 
-## Show metric/space by [peco](https://github.com/peco/peco)
+## Show resource by [peco](https://github.com/peco/peco)
+
+```sh
+lbrt alert peco
+```
 
 ```sh
 lbrt metric peco

@@ -7,6 +7,24 @@ class Lbrt::Alert
     @driver = Lbrt::Driver.new(@client, @options)
   end
 
+  def peco
+    alert_by_name = {}
+
+    @client.alerts.get.each do |alrt|
+      alert_id = alrt.fetch('id')
+      name = alrt.fetch('name')
+      next unless Lbrt::Utils.matched?(name, @options[:target])
+      alert_by_name[name] = alert_id
+    end
+
+    result = PecoSelector.select_from(alert_by_name)
+
+    result.each do |alert_id|
+      url = "https://metrics.librato.com/alerts#/#{alert_id}"
+      Lbrt::Utils.open(url)
+    end
+  end
+
   def export(export_options = {})
     exported = Lbrt::Alert::Exporter.export(@client, @options)
     Lbrt::Alert::DSL.convert(exported, @options)

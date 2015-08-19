@@ -3,6 +3,11 @@ class Lbrt::CLI::Alert < Thor
 
   class_option :target
 
+  desc 'peco', 'Show alert by peco'
+  def peco
+    client(Lbrt::Alert).peco
+  end
+
   desc 'apply FILE', 'Apply alerts'
   option :'dry-run', :type => :boolean, :default => false
   def apply(file)

@@ -8,7 +8,7 @@ class Lbrt::Metric
 
   def peco
     metric_names = @client.metrics.get.map {|mtrc|
-      mtrc['name']
+      mtrc.fetch('name')
     }.select {|name|
       Lbrt::Utils.matched?(name, @options[:target])
     }

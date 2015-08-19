@@ -10,7 +10,7 @@ class Lbrt::Space
   def peco
     space_by_name_or_id = {}
 
-    metric_names = @client.spaces.get.each do |spc|
+    @client.spaces.get.each do |spc|
       space_id = spc.fetch('id')
       name_or_id = spc.fetch('name') || space_id
       next unless Lbrt::Utils.matched?(name_or_id, @options[:target])
@@ -19,8 +19,8 @@ class Lbrt::Space
 
     result = PecoSelector.select_from(space_by_name_or_id)
 
-    result.each do |name|
-      url = "https://metrics.librato.com/s/spaces/#{name}"
+    result.each do |space_id|
+      url = "https://metrics.librato.com/s/spaces/#{space_id}"
       Lbrt::Utils.open(url)
     end
   end
