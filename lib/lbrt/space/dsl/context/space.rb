@@ -1,9 +1,10 @@
 class Lbrt::Space::DSL::Context::Space
-  def initialize(name_or_id, templates, &block)
+  include Lbrt::Utils::TemplateHelper
+
+  def initialize(context, name_or_id, &block)
+    @context = context.merge(:space_name => name_or_id)
     @name_or_id = name_or_id
-    @templates = templates
     @result = {'charts' => {}}
-    @context = Hashie::Mash.new(:space_name => name_or_id)
     instance_eval(&block)
   end
 
@@ -11,16 +12,6 @@ class Lbrt::Space::DSL::Context::Space
   attr_reader :context
 
   private
-
-  def include_template(template_name)
-    tmplt = @templates[template_name.to_s]
-
-    unless tmplt
-      raise "Space `#{@name_or_id}`: Template `#{template_name}` is not defined"
-    end
-
-    instance_eval(&tmplt)
-  end
 
   def chart(chart_name_or_id, &block)
     if @result[chart_name_or_id]

@@ -1,14 +1,19 @@
 class Lbrt::Service::DSL::Context::Service
+  include Lbrt::Utils::TemplateHelper
+
   REQUIRED_ATTRIBUTES = %w(
     settings
   )
 
-  def initialize(type, title, &block)
+  def initialize(context, type, title, &block)
+    @context = context.merge(:service_type => type, :service_title => title)
     @type = type
     @title = title
     @result = {}
     instance_eval(&block)
   end
+
+  attr_reader :context
 
   def result
     REQUIRED_ATTRIBUTES.each do |name|

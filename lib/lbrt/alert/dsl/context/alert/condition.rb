@@ -1,4 +1,6 @@
 class Lbrt::Alert::DSL::Context::Alert::Condition
+  include Lbrt::Utils::TemplateHelper
+
   REQUIRED_ATTRIBUTES = %w(
     type
     metric_name
@@ -11,11 +13,14 @@ class Lbrt::Alert::DSL::Context::Alert::Condition
     'active' => %W(duration),
   }
 
-  def initialize(alert_name, &block)
+  def initialize(context, alert_name, &block)
+    @context = context.dup
     @alert_name = alert_name
     @result = {}
     instance_eval(&block)
   end
+
+  attr_reader :context
 
   def result
     REQUIRED_ATTRIBUTES.each do |name|

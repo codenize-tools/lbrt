@@ -1,5 +1,6 @@
 class Lbrt::Alert::DSL::Context
   include Lbrt::Utils::ContextHelper
+  include Lbrt::Utils::TemplateHelper
 
   def self.eval(client, dsl, path, options = {})
     self.new(client, path, options) {
@@ -8,12 +9,20 @@ class Lbrt::Alert::DSL::Context
   end
 
   attr_reader :result
+  attr_reader :context
 
   def initialize(client, path, options = {}, &block)
     @path = path
     @options = options
     @result = {}
     @services = Lbrt::Service::Exporter.export(client, options)
+
+    @context = Hashie::Mash.new(
+      :path => path,
+      :options => options,
+      :templates => {}
+    )
+
     instance_eval(&block)
   end
 
@@ -26,7 +35,7 @@ class Lbrt::Alert::DSL::Context
       raise "Alert `#{name}` is already defined"
     end
 
-    alrt = Lbrt::Alert::DSL::Context::Alert.new(name, @services, &block).result
+    alrt = Lbrt::Alert::DSL::Context::Alert.new(@context, name, @services, &block).result
     @result[name] = alrt
   end
 end

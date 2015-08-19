@@ -1,4 +1,6 @@
 class Lbrt::Alert::DSL::Context::Alert
+  include Lbrt::Utils::TemplateHelper
+
   REQUIRED_ATTRIBUTES = %w(
     description
     attributes
@@ -7,7 +9,8 @@ class Lbrt::Alert::DSL::Context::Alert
     rearm_per_signal
   )
 
-  def initialize(name, services, &block)
+  def initialize(context, name, services, &block)
+    @context = context.merge(:alert_name => name)
     @name = name
     @services = services
 
@@ -19,6 +22,8 @@ class Lbrt::Alert::DSL::Context::Alert
 
     instance_eval(&block)
   end
+
+  attr_reader :context
 
   def result
     REQUIRED_ATTRIBUTES.each do |name|
@@ -57,7 +62,7 @@ class Lbrt::Alert::DSL::Context::Alert
   end
 
   def condition(&block)
-    @result['conditions'] << Lbrt::Alert::DSL::Context::Alert::Condition.new(@name, &block).result
+    @result['conditions'] << Lbrt::Alert::DSL::Context::Alert::Condition.new(@context, @name, &block).result
   end
 
   def service(type, title)

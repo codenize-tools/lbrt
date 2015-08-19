@@ -33,6 +33,22 @@ class Lbrt::Utils
         Kernel.require(file)
       end
     end
+
+    def template(name, &block)
+      @context.templates[name.to_s] = block
+    end
+  end
+
+  module TemplateHelper
+    def include_template(template_name)
+      tmplt = @context.templates[template_name.to_s]
+
+      unless tmplt
+        raise "Template `#{template_name}` is not defined"
+      end
+
+      instance_eval(&tmplt)
+    end
   end
 
   module CLIHelper

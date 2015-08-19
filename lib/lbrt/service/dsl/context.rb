@@ -1,5 +1,6 @@
 class Lbrt::Service::DSL::Context
   include Lbrt::Utils::ContextHelper
+  include Lbrt::Utils::TemplateHelper
 
   def self.eval(dsl, path, options = {})
     self.new(path, options) {
@@ -8,11 +9,19 @@ class Lbrt::Service::DSL::Context
   end
 
   attr_reader :result
+  attr_reader :context
 
   def initialize(path, options = {}, &block)
     @path = path
     @options = options
     @result = {}
+
+    @context = Hashie::Mash.new(
+      :path => path,
+      :options => options,
+      :templates => {}
+    )
+
     instance_eval(&block)
   end
 
@@ -27,7 +36,7 @@ class Lbrt::Service::DSL::Context
       raise "Service `#{type}/#{title}` is already defined"
     end
 
-    srvc = Lbrt::Service::DSL::Context::Service.new(type, title, &block).result
+    srvc = Lbrt::Service::DSL::Context::Service.new(@context, type, title, &block).result
     @result[key] = srvc
   end
 end

@@ -1,4 +1,6 @@
 class Lbrt::Space::DSL::Context::Space::Chart::Stream
+  include Lbrt::Utils::TemplateHelper
+
   REQUIRED_ATTRIBUTES = %w(
     metric
     type

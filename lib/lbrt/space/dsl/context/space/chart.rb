@@ -1,4 +1,6 @@
 class Lbrt::Space::DSL::Context::Space::Chart
+  include Lbrt::Utils::TemplateHelper
+
   REQUIRED_ATTRIBUTES = %w(
     type
   )

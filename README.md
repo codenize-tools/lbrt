@@ -198,7 +198,7 @@ space "My Space2" do
 end
 ```
 
-### Space template
+## template
 
 ```ruby
 template "dstat" do
@@ -230,6 +230,8 @@ space "my-host-001" do
   include_template "dstat"
 end
 ```
+
+You can use the template in the `alert` and `service`.
 
 ## Show resource by [peco](https://github.com/peco/peco)
 
