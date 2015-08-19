@@ -258,6 +258,49 @@ include_template "my alert", metric_name: 'login-delay'
 include_template "my alert", metric_name: 'login-delay2'
 ```
 
+```ruby
+template "alert set1" do
+  alert "#{context.hostname}/login-delay" do
+    description "desc"
+    attributes "runbook_url"=>"http://url.com"
+    active true
+    rearm_seconds 600
+    rearm_per_signal false
+
+    condition do
+      type "below"
+      metric_name 'login-delay'
+      source nil
+      threshold 4.0
+      summary_function "sum"
+    end
+
+    service "mail", "my email"
+  end
+
+  alert "#{context.hostname}/login-delay2" do
+    description "desc"
+    attributes "runbook_url"=>"http://url.com"
+    active true
+    rearm_seconds 600
+    rearm_per_signal false
+
+    condition do
+      type "below"
+      metric_name 'login-delay2'
+      source nil
+      threshold 4.0
+      summary_function "sum"
+    end
+
+    service "mail", "my email"
+  end
+end
+
+include_template "alert set1", hostname: 'host1'
+include_template "alert set1", hostname: 'host2'
+```
+
 ## Show resource by [peco](https://github.com/peco/peco)
 
 ```sh
