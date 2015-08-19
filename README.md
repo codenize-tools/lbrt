@@ -262,7 +262,7 @@ include_template "my alert", metric_name: 'login-delay2'
 template "alert set1" do
   alert "#{context.hostname}/login-delay" do
     description "desc"
-    attributes "runbook_url"=>"http://url.com"
+    attributes "runbook_url"=>"http://example.com"
     active true
     rearm_seconds 600
     rearm_per_signal false
@@ -280,7 +280,7 @@ template "alert set1" do
 
   alert "#{context.hostname}/login-delay2" do
     description "desc"
-    attributes "runbook_url"=>"http://url.com"
+    attributes "runbook_url"=>"http://example.com"
     active true
     rearm_seconds 600
     rearm_per_signal false
