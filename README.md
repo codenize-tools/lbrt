@@ -198,7 +198,7 @@ space "My Space2" do
 end
 ```
 
-## template
+## Template
 
 ```ruby
 template "dstat" do
