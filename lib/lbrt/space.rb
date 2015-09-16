@@ -84,16 +84,24 @@ class Lbrt::Space
     updated = false
 
     expected.each do |name_or_id, expected_chart|
-      actual_chart = actual.delete(name_or_id)
+      begin
+        actual_chart = actual.delete(name_or_id)
 
-      if not actual_chart and name_or_id.is_a?(Integer)
-        actual_chart = actual.values.find {|i| i['id'] == name_or_id }
-      end
+        if not actual_chart and name_or_id.is_a?(Integer)
+          actual_chart = actual.values.find {|i| i['id'] == name_or_id }
+        end
 
-      if actual_chart
-        updated = walk_chart(space_name_or_id, space_id, name_or_id, expected_chart, actual_chart) || updated
-      else
-        updated = @driver.create_chart(space_name_or_id, space_id, name_or_id, expected_chart) || updated
+        if actual_chart
+          updated = walk_chart(space_name_or_id, space_id, name_or_id, expected_chart, actual_chart) || updated
+        else
+          updated = @driver.create_chart(space_name_or_id, space_id, name_or_id, expected_chart) || updated
+        end
+      rescue Librato::Client::Error => e
+        if @options[:ignore_no_metric] and e.cause.response[:body] =~ /no metric/
+          log(:warn, e.message, :color => :yellow)
+        else
+          raise e
+        end
       end
     end
 

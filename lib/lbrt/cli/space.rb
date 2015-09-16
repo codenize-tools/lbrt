@@ -11,6 +11,7 @@ class Lbrt::CLI::Space < Thor
 
   desc 'apply FILE', 'Apply spaces'
   option :'dry-run', :type => :boolean, :default => false
+  option :'ignore-no-metric', :type => :boolean, :default => true
   def apply(file)
     updated = client(Lbrt::Space).apply(file)
 
