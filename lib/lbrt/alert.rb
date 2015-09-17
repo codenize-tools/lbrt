@@ -13,7 +13,9 @@ class Lbrt::Alert
     json = {}
     alert_by_name = build_alert_by_name
 
-    alert_by_name.each do |name, alrt|
+    alert_by_name.select {|name, alrt|
+      @options[:status].nil? or @options[:status] == alrt[:status]
+    }.each {|name, alrt|
       alert_id = alrt[:id]
 
       json[alert_id] = {
@@ -21,7 +23,7 @@ class Lbrt::Alert
         url: alert_url(alert_id),
         status: alrt[:status],
       }
-    end
+    }
 
     puts JSON.pretty_generate(json)
   end
