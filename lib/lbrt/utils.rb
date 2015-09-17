@@ -22,15 +22,15 @@ class Lbrt::Utils
   end # of class methods
 
   module ContextHelper
-    def require(file)
-      file = (file =~ %r|\A/|) ? file : File.expand_path(File.join(File.dirname(@path), file))
+    def require(file_orig)
+      file = (file_orig =~ %r|\A/|) ? file_orig : File.expand_path(File.join(File.dirname(@path), file_orig))
 
       if File.exist?(file)
         instance_eval(File.read(file), file)
       elsif File.exist?(file + '.rb')
         instance_eval(File.read(file + '.rb'), file + '.rb')
       else
-        Kernel.require(file)
+        Kernel.require(file_orig)
       end
     end
 
