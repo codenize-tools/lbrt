@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'diffy'
   spec.add_dependency 'hashie'
-  spec.add_dependency 'librato-client'
+  spec.add_dependency 'librato-client', '>= 0.1.1'
   spec.add_dependency 'parallel'
   spec.add_dependency 'peco_selector'
   spec.add_dependency 'term-ansicolor'

@@ -45,6 +45,7 @@ Commands:
   lbrt alert apply FILE      # Apply alerts
   lbrt alert export [FILE]   # Export alerts
   lbrt alert help [COMMAND]  # Describe subcommands or one specific subcommand
+  lbrt alert list            # Show alerts
   lbrt alert peco            # Show alert by peco
 
 Options:
@@ -55,7 +56,8 @@ Options:
 $ brt help metric
 Commands:
   lbrt metric help [COMMAND]  # Describe subcommands or one specific subcommand
-  lbrt metric peco REGRXP     # Show alert by peco
+  lbrt metric list            # Show metrics
+  lbrt metric peco REGRXP     # Show metric by peco
 
 Options:
   [--target=TARGET]
@@ -67,6 +69,7 @@ Commands:
   lbrt service apply FILE      # Apply services
   lbrt service export [FILE]   # Export services
   lbrt service help [COMMAND]  # Describe subcommands or one specific subcommand
+  lbrt service list            # Show services
 
 Options:
   [--target=TARGET]
@@ -78,11 +81,12 @@ Commands:
   lbrt space apply FILE      # Apply spaces
   lbrt space export [FILE]   # Export spaces
   lbrt space help [COMMAND]  # Describe subcommands or one specific subcommand
+  lbrt space list            # Show spaces
   lbrt space peco            # Show space by peco
 
 Options:
   [--target=TARGET]
-  [--export-concurrency=N]
+  [--concurrency=N]
                             # Default: 32
 ```
 

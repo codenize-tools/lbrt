@@ -2,7 +2,12 @@ class Lbrt::CLI::Space < Thor
   include Lbrt::Utils::CLIHelper
 
   class_option :target
-  class_option :'export-concurrency', :type => :numeric, :default => 32
+  class_option :'concurrency', :type => :numeric, :default => 32
+
+  desc 'list', 'Show spaces'
+  def list
+    client(Lbrt::Space).list
+  end
 
   desc 'peco', 'Show space by peco'
   def peco

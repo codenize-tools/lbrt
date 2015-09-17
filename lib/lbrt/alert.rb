@@ -1,27 +1,45 @@
 class Lbrt::Alert
   include Lbrt::Logger::Helper
 
+  DEFAULT_CONCURRENCY = 32
+
   def initialize(client, options = {})
     @client = client
     @options = options
     @driver = Lbrt::Driver.new(@client, @options)
   end
 
-  def peco
-    alert_by_name = {}
+  def list
+    json = {}
+    alert_by_name = build_alert_by_name
 
-    @client.alerts.get.each do |alrt|
-      alert_id = alrt.fetch('id')
-      name = alrt.fetch('name')
-      next unless Lbrt::Utils.matched?(name, @options[:target])
-      alert_by_name[name] = alert_id
+    alert_by_name.each do |name, alrt|
+      alert_id = alrt[:id]
+
+      json[alert_id] = {
+        name: name,
+        url: alert_url(alert_id),
+        status: alrt[:status],
+      }
     end
 
-    result = PecoSelector.select_from(alert_by_name)
+    puts JSON.pretty_generate(json)
+  end
 
-    result.each do |alert_id|
-      url = "https://metrics.librato.com/alerts#/#{alert_id}"
-      Lbrt::Utils.open(url)
+  def peco
+    alert_id_by_name = {}
+
+    build_alert_by_name.select {|name, alrt|
+      @options[:status].nil? or @options[:status] == alrt[:status]
+    }.map {|name, alrt| alert_id_by_name[name] = alrt[:id] }
+
+    unless alert_id_by_name.empty?
+      result = PecoSelector.select_from(alert_id_by_name)
+
+      result.each do |alert_id|
+        url = alert_url(alert_id)
+        Lbrt::Utils.open(url)
+      end
     end
   end
 
@@ -35,6 +53,31 @@ class Lbrt::Alert
   end
 
   private
+
+  def build_alert_by_name
+    alert_by_name = {}
+
+    @client.alerts.get.each do |alrt|
+      alert_id = alrt.fetch('id')
+      name = alrt.fetch('name')
+      next unless Lbrt::Utils.matched?(name, @options[:target])
+      alert_by_name[name] = {id: alert_id}
+    end
+
+    concurrency = @options[:concurrency] || DEFAULT_CONCURRENCY
+
+    Parallel.each(alert_by_name, :in_threads => concurrency) do |name, alrt|
+      alert_id = alrt[:id]
+      status = @client.alerts(alert_id).status.get
+      alrt[:status] = status['status']
+    end
+
+    alert_by_name
+  end
+
+  def alert_url(alert_id)
+    "https://metrics.librato.com/alerts#/#{alert_id}"
+  end
 
   def walk(file)
     expected = load_file(file)

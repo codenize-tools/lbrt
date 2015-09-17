@@ -21,7 +21,7 @@ class Lbrt::Space::Exporter
 
   def normalize_spaces(spaces)
     space_by_name_or_id = {}
-    concurrency = @options[:export_concurrency] || DEFAULT_CONCURRENCY
+    concurrency = @options[:concurrency] || DEFAULT_CONCURRENCY
 
     Parallel.each(spaces, :in_threads => concurrency) do |spc|
       space_id = spc.fetch('id')

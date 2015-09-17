@@ -1,6 +1,23 @@
 class Lbrt::Service
   include Lbrt::Logger::Helper
 
+  def list
+    json = {}
+    service_by_key = build_service_by_key
+
+    service_by_key.each do |service_key, srvc|
+      service_id = srvc.delete('id')
+      type, title = service_key
+
+      json[service_id] = {
+        type: type,
+        title: title,
+      }.merge(srvc)
+    end
+
+    puts JSON.pretty_generate(json)
+  end
+
   def initialize(client, options = {})
     @client = client
     @options = options
@@ -17,6 +34,20 @@ class Lbrt::Service
   end
 
   private
+
+  def build_service_by_key
+    service_by_key = {}
+
+    @client.services.get.each do |srvc|
+      type = srvc.delete('type')
+      title = srvc.delete('title')
+      service_key = [type, title]
+      next unless service_key.any? {|i| Lbrt::Utils.matched?(i, @options[:target]) }
+      service_by_key[service_key] = srvc
+    end
+
+    service_by_key
+  end
 
   def walk(file)
     expected = load_file(file)

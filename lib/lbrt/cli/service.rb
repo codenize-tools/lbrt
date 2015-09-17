@@ -3,6 +3,11 @@ class Lbrt::CLI::Service < Thor
 
   class_option :target
 
+  desc 'list', 'Show services'
+  def list
+    client(Lbrt::Service).list
+  end
+
   desc 'apply FILE', 'Apply services'
   option :'dry-run', :type => :boolean, :default => false
   def apply(file)

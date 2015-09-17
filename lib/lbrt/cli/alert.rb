@@ -3,7 +3,16 @@ class Lbrt::CLI::Alert < Thor
 
   class_option :target
 
+  desc 'list', 'Show alerts'
+  option :'status'
+  option :'concurrency', :type => :numeric, :default => 32
+  def list
+    client(Lbrt::Alert).list
+  end
+
   desc 'peco', 'Show alert by peco'
+  option :'status'
+  option :'concurrency', :type => :numeric, :default => 32
   def peco
     client(Lbrt::Alert).peco
   end

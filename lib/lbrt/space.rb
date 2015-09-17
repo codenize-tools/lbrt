@@ -7,20 +7,26 @@ class Lbrt::Space
     @driver = Lbrt::Driver.new(@client, @options)
   end
 
-  def peco
-    space_by_name_or_id = {}
+  def list
+    json = {}
+    space_by_name_or_id = build_space_by_name_or_id
 
-    @client.spaces.get.each do |spc|
-      space_id = spc.fetch('id')
-      name_or_id = spc.fetch('name') || space_id
-      next unless Lbrt::Utils.matched?(name_or_id, @options[:target])
-      space_by_name_or_id[name_or_id] = space_id
+    space_by_name_or_id.each do |name_or_id, space_id|
+      json[space_id] = {
+        name: name_or_id,
+        url: space_url(space_id),
+      }
     end
 
+    puts JSON.pretty_generate(json)
+  end
+
+  def peco
+    space_by_name_or_id = build_space_by_name_or_id
     result = PecoSelector.select_from(space_by_name_or_id)
 
     result.each do |space_id|
-      url = "https://metrics.librato.com/s/spaces/#{space_id}"
+      url = space_url(space_id)
       Lbrt::Utils.open(url)
     end
   end
@@ -35,6 +41,23 @@ class Lbrt::Space
   end
 
   private
+
+  def build_space_by_name_or_id
+    space_by_name_or_id = {}
+
+    @client.spaces.get.each do |spc|
+      space_id = spc.fetch('id')
+      name_or_id = spc.fetch('name') || space_id
+      next unless Lbrt::Utils.matched?(name_or_id, @options[:target])
+      space_by_name_or_id[name_or_id] = space_id
+    end
+
+    space_by_name_or_id
+  end
+
+  def space_url(space_id)
+    "https://metrics.librato.com/s/spaces/#{space_id}"
+  end
 
   def walk(file)
     expected = load_file(file)
