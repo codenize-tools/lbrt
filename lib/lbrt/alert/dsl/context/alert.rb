@@ -38,7 +38,7 @@ class Lbrt::Alert::DSL::Context::Alert
   private
 
   def description(value)
-    @result['description'] = value.to_s
+    @result['description'] = value.nil? ? value : value.to_s
   end
 
   def attributes(value)
